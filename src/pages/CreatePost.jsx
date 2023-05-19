@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FormField from '../components/FormField';
 import Loader from '../components/Loader';
+import { getRandomPrompt } from '../utils';
 const CreatePost = () => {
   const navigate = useNavigate();
 
@@ -10,14 +11,84 @@ const CreatePost = () => {
     prompt: '',
     photo: '',
   });
+  console.log(form);
 
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {};
-  const handleChange = (e) => {};
-  const handleSurpriseMe = () => {};
-  const generateImg = () => {};
+  // Handle submit___________________________________________________
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (form.prompt && form.photo) {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          'https://dall-e-server-delta.vercel.app/api/post',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ...form }),
+          }
+        );
+
+        await response.json();
+        alert('Success');
+        navigate('/');
+      } catch (err) {
+        alert(err);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      alert('Please generate an image with proper details');
+    }
+  };
+
+  // Handle Changes_________________________________________________
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // Surprise me by giving some img concepts ............................
+
+  const handleSurpriseMe = () => {
+    const randomPrompt = getRandomPrompt(form.prompt);
+    setForm({ ...form, prompt: randomPrompt });
+  };
+
+  // generate images___________________
+
+  const generateImg = async () => {
+    if (form.prompt) {
+      try {
+        setGeneratingImg(true);
+        const response = await fetch('http://localhost:1000/api/dalle', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prompt: form.prompt,
+          }),
+        });
+
+        const data = await response.json();
+        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+      } catch (err) {
+        alert(err);
+      } finally {
+        setGeneratingImg(false);
+      }
+    } else {
+      alert('Please provide proper prompt');
+    }
+  };
+
   return (
     <section className="w-[95%] py-3 mx-auto">
       <div>

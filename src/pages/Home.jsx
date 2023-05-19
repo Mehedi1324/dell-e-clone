@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import Card from '../components/Card';
+import { useEffect, useState } from 'react';
 import Loader from '../components/Loader';
 import FormField from '../components/FormField';
 import RenderCards from '../components/RenderCards';
@@ -8,6 +7,54 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [allPosts, setAllPosts] = useState(null);
   const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState(null);
+  const [searchTimeout, setSearchTimeout] = useState(null);
+
+  // Get all the images__________________________________
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          'https://dall-e-server-delta.vercel.app/api/post',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        if (response.ok) {
+          const result = await response.json();
+          setAllPosts(result.data.reverse());
+        }
+      } catch (error) {
+        alert(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPost();
+  }, []);
+
+  // Handle Searchbar__________________________________________
+
+  const handleSearchChange = (e) => {
+    clearTimeout(searchTimeout);
+    setSearchInput(e.target.value);
+    setSearchTimeout(
+      setTimeout(() => {
+        const searchResults = allPosts.filter(
+          (item) =>
+            item.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+            item.prompt.toLowerCase().includes(searchInput.toLowerCase())
+        );
+        setSearchResults(searchResults);
+      }, 500)
+    );
+  };
+
   return (
     <div className="w-[95%] py-3 mx-auto">
       <section className="mx-auto max-w-7xl">
@@ -21,7 +68,14 @@ const Home = () => {
           </p>
         </div>
         <div className="mt-10">
-          <FormField />
+          <FormField
+            labelName="Search Posts"
+            type="text"
+            name="text"
+            placeholder="Search posts"
+            value={searchInput}
+            handleChange={handleSearchChange}
+          />
         </div>
         <div className="mt-10">
           {loading ? (
@@ -38,9 +92,12 @@ const Home = () => {
               )}
               <div className="grid grid-cols-1 gap-3 lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2">
                 {searchInput ? (
-                  <RenderCards data={[]} title="No search results found" />
+                  <RenderCards
+                    data={searchResults}
+                    title="No search results found"
+                  />
                 ) : (
-                  <RenderCards data={[]} title="No post found" />
+                  <RenderCards data={allPosts} title="No post found" />
                 )}
               </div>
             </>
