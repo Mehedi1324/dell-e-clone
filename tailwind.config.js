@@ -10,9 +10,9 @@ export default {
         inter: ['Inter var', 'sans-serif'],
       },
       boxShadow: {
-        card: '0 0 1px 0 rgba(189,192,207,0.06),0 10px 16px -1px rgba(189,192,207,0.2)',
-        cardhover:
-          '0 0 1px 0 rgba(189,192,207,0.06),0 10px 16px -1px rgba(189,192,207,0.4)',
+        card: '0px 0px 6px 4px #000000d9',
+        btn: '1px 1px 2px 1px #000000d9',
+        cardhover: '0px 0px 5px 3px #949292',
       },
     },
   },

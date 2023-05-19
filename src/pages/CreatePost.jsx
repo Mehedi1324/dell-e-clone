@@ -97,8 +97,8 @@ const CreatePost = () => {
       <div>
         {' '}
         <div>
-          <h1 className="font-extrabold text-[#222328] text-[32px]">Create</h1>
-          <p className="mt-2 text-[#666e75] text-[16px] max-w-[500px]">
+          <h1 className="font-extrabold text-white text-[32px]">Create</h1>
+          <p className="mt-2 text-white/90 text-[16px] max-w-[500px]">
             Create imaginative and visually stunning images through DALL-E AI
             and share them with the community
           </p>
@@ -124,18 +124,18 @@ const CreatePost = () => {
             isSurpriseMe
             handleSurpriseMe={handleSurpriseMe}
           />
-          <div className="relative flex items-center justify-center w-64 h-64 p-3 text-sm text-gray-900 border rounded-lg outline-none bg-gray-50 broder-gray-300 focus:ring-blue-500 focus:border-blue-500">
+          <div className="relative flex items-center justify-center w-64 h-64 p-1 text-sm text-gray-900 border rounded-lg outline-none bg-gray-50 broder-gray-300 focus:ring-blue-500 focus:border-blue-500">
             {form.photo ? (
               <img
                 src={form.photo}
                 alt={form.prompt}
-                className="object-contain w-full h-full"
+                className="object-contain w-full h-full rounded-lg"
               />
             ) : (
               <img
                 src="/assets/preview.png"
                 alt="preview"
-                className="object-contain w-9/12 h-9/12 opacity-40"
+                className="object-contain w-9/12 rounded-lg h-9/12 opacity-40"
               />
             )}
             {generatingImg && (
@@ -147,7 +147,7 @@ const CreatePost = () => {
         </div>
         <div className="mt-5 ">
           <button
-            className="w-full  text-sm font-medium text-white bg-green-700 rounded-md sm:w-auto px-5 py-2.5 text-center"
+            className="w-full hover:bg-slate-700 shadow-btn text-sm font-medium text-white bg-green-700 rounded-md sm:w-auto px-5 py-2.5 text-center"
             onClick={generateImg}
             type="button"
           >
@@ -155,13 +155,13 @@ const CreatePost = () => {
           </button>
         </div>
         <div className="mt-10">
-          <p className="mt-2 text-gray-800 text-[14px]">
+          <p className="mt-2 text-white/90 text-[14px]">
             Once you have created the image you want, you can share it with
             others in the community
           </p>
           <button
             type="submit"
-            className="mt-3 text-white bg-blue-500 font-midum rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+            className="mt-3 hover:bg-slate-700 text-white shadow-btn bg-blue-500 font-midum rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
             {loading ? 'Shareing...' : 'Share with the community'}
           </button>

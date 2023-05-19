@@ -8,7 +8,7 @@ const App = () => {
     <div>
       <BrowserRouter>
         <Header />
-        <div className="bg-[#f9fafe] h-[calc(100vh-63px)]">
+        <div className="bg-gradient-to-r from-[#000000d4] backdrop-brightness-50 to-gray-900 h-full min-h-screen backdrop-blur-sm">
           <Routes className="">
             <Route path="/" element={<Home />} />
             <Route path="/create-post" element={<CreatePost />} />
